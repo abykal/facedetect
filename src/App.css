@@ -1,6 +1,7 @@
 .App {
   text-align: center;
-  max-height: 100vh;
+  /* max-height: 100%; */
+  overflow: auto;
 }
 
 .center {
