@@ -2,11 +2,13 @@ import React, { Component } from "react";
 import Particles from "react-particles-js";
 import Navigation from "./components/header/Navigation";
 import Signin from "./components/header/Signin";
+import Register from "./components/header/Register";
 import Logo from "./components/header/Logo";
 import ImageLinkForm from "./components/body/ImageLinkForm";
 import Rank from "./components/body/Rank";
 import FaceRecognition from "./components/body/FaceRecognition";
 import "./App.css";
+
 
 // CLARFAI API
 const Clarifai = require('clarifai');
@@ -80,6 +82,7 @@ class App extends Component {
       imageUrl: '',
       box: {},
       route: 'signin',
+      isSignedIn: false
     }
   }
 
@@ -121,18 +124,22 @@ displayFaceBox = (box) => {
 
 
   onRouteChange = (route) => {
-    this.setState({route: route});
+    if(route === 'signout'){
+      this.setState({isSignedIn: false});
+    } else if (route === 'home') {
+      this.setState({isSignedIn: true})
+    }
+    this.setState({route: route})
   }
 
   render() {
     return (
       <div className="App">
         <Particles className='particles' params={particleOptions} />
-        <Navigation onRouteChange={this.onRouteChange}/>
+        <Navigation isSignedIn={this.state.isSignedIn} onRouteChange={this.onRouteChange}/>
         
-        { this.state.route === 'signin'
-          ? <Signin onRouteChange={this.onRouteChange}/>
-          : <div>
+        { this.state.route === 'home'
+          ? <div>
               <Logo />
               <Rank />
               <ImageLinkForm 
@@ -141,6 +148,11 @@ displayFaceBox = (box) => {
               />
               <FaceRecognition box={this.state.box} imageUrl={this.state.imageUrl}/>
             </div>
+          : ( 
+              this.state.route === 'signin'
+              ? <Signin onRouteChange={this.onRouteChange}/>
+              : <Register onRouteChange={this.onRouteChange}/>
+            )
         }
       </div>
     );
