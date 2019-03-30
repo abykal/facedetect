@@ -6,6 +6,15 @@ import ImageLinkForm from "./components/body/ImageLinkForm";
 import Rank from "./components/body/Rank";
 import "./App.css";
 
+// CLARFAI API
+const Clarifai = require('clarifai');
+
+const app = new Clarifai.App({
+  apiKey: '00e106a6f360437e8403cf978954360c'
+ });
+
+
+// PARTICLE.JS BUBBLE SETUP 
 const particleOptions = {
   particles: {
     number: {
@@ -76,6 +85,16 @@ class App extends Component {
   onButtonSubmit = () => {
     console.log('click');
     
+    // CLARIFAI API for FACE DETECTION 
+    app.models.predict("a403429f2ddf4b49b307e318f00e528b", "https://samples.clarifai.com/face-det.jpg").then(
+      function(response) {
+        console.log(response);
+      },
+      function(err) {
+        // there was an error
+      }
+    );
+
   }
 
   render() {
