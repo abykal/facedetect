@@ -4,6 +4,7 @@ import Navigation from "./components/header/Navigation";
 import Logo from "./components/header/Logo";
 import ImageLinkForm from "./components/body/ImageLinkForm";
 import Rank from "./components/body/Rank";
+import FaceRecognition from "./components/body/FaceRecognition";
 import "./App.css";
 
 // CLARFAI API
@@ -75,25 +76,25 @@ class App extends Component {
     super();
     this.state = {
       input: '',
+      imageUrl: '',
     }
   }
 
+  // The input field catcher
   onInputChange = (event) => {
-    console.log(event.target.value);
+    this.setState({input: event.target.value});
   }
 
+  // DETECT Button
   onButtonSubmit = () => {
-    console.log('click');
+    this.setState({imageUrl: this.state.input});
     
     // CLARIFAI API for FACE DETECTION 
-    app.models.predict("a403429f2ddf4b49b307e318f00e528b", "https://samples.clarifai.com/face-det.jpg").then(
-      function(response) {
-        console.log(response);
-      },
-      function(err) {
-        // there was an error
-      }
-    );
+    app.models.predict(Clarifai.FACE_DETECT_MODEL, this.state.input)   //Here we are using input instead of imageUrl (error occurs which is an advaned topic)
+      .then(response => {
+        var faceBox = response['outputs'][0]['data']['regions'][0]['region_info']['bounding_box'];
+        console.log(response, faceBox);
+    })
 
   }
 
@@ -108,7 +109,7 @@ class App extends Component {
             onInputChange={this.onInputChange} 
             onButtonSubmit={this.onButtonSubmit}
         />
-        {/*<FaceRecognition />*/}
+        <FaceRecognition imageUrl={this.state.imageUrl}/>
       </div>
     );
   }
