@@ -134,7 +134,22 @@ displayFaceBox = (box) => {
     // CLARIFAI API for FACE DETECTION 
     app.models
       .predict(Clarifai.FACE_DETECT_MODEL, this.state.input)   //Here we are using input instead of imageUrl (error occurs which is an advaned topic)
-      .then(response => this.displayFaceBox(this.calculateFaceLocation(response)))
+      .then(response => {
+        if(response){
+          fetch('http://localhost:4500/image', {
+            method: 'put',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+              id: this.state.user.id
+            })
+          })
+            .then(response => response.json())
+            .then(count => {
+              this.setState(Object.assign(this.state.user, {entries: count}))
+            })
+        }
+        this.displayFaceBox(this.calculateFaceLocation(response))
+      })
       .catch(err => console.log(err));
     
 
