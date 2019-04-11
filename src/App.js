@@ -159,7 +159,7 @@ displayFaceBox = (box) => {
         { this.state.route === 'home'
           ? <div>
               <Logo />
-              <Rank />
+              <Rank name={this.state.user.name} entries={this.state.user.emtries}/>
               <ImageLinkForm 
                 onInputChange={this.onInputChange} 
                 onButtonSubmit={this.onButtonSubmit}
@@ -168,7 +168,7 @@ displayFaceBox = (box) => {
             </div>
           : ( 
               this.state.route === 'signin'
-              ? <Signin onRouteChange={this.onRouteChange}/>
+              ? <Signin loadUser={this.loadUser} onRouteChange={this.onRouteChange}/>
               : <Register loadUser={this.loadUser} onRouteChange={this.onRouteChange}/>
             )
         }
